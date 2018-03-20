@@ -39,7 +39,7 @@ public class LocationListViewModel extends AndroidViewModel {
         mObservableLocations.setValue(null);
 
         LiveData<List<LocationEntity>> locations = ((BasicApp) application).getRepository()
-                .getProducts();
+                .getLocations();
 
         // observe the changes of the products from the database and forward them
         mObservableLocations.addSource(locations, mObservableLocations::setValue);

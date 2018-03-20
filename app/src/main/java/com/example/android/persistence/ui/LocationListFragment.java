@@ -20,28 +20,51 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdate;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.core.PoiItem;
 import com.example.android.persistence.R;
 import com.example.android.persistence.databinding.ListFragmentBinding;
 import com.example.android.persistence.db.entity.LocationEntity;
 import com.example.android.persistence.model.Location;
 import com.example.android.persistence.viewmodel.LocationListViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class LocationListFragment extends Fragment {
+public class LocationListFragment extends Fragment implements AMapLocationListener, AMap.OnMapLoadedListener {
 
     public static final String TAG = "LocationListViewModel";
 
     private LocationAdapter mLocationAdapter;
 
     private ListFragmentBinding mBinding;
+
+    private AMapLocationClient mLocationClient = null;
+    private AMapLocationClientOption mLocationOption = null;
+    private MapView mapView;
+    private AMap aMap;
+    private static final LatLng FOCUSED_POSITION = new LatLng(36.197164, 120.518861);
+
 
     @Nullable
     @Override
@@ -50,11 +73,29 @@ public class LocationListFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.list_fragment, container, false);
 
         mLocationAdapter = new LocationAdapter(mLocationClickCallback);
-        mBinding.locationsList.setAdapter(mLocationAdapter);
+//        mBinding.locationsList.setAdapter(mLocationAdapter);
 
+        initMap(savedInstanceState);
         return mBinding.getRoot();
     }
 
+    private void initMap(Bundle savedInstanceState) {
+        mapView = mBinding.getRoot().findViewById(R.id.overlay_map);
+        mapView.onCreate(savedInstanceState);
+        if (aMap == null) {
+            aMap = mapView.getMap();
+            mapView.setSelected(true);
+            aMap.moveCamera(CameraUpdateFactory.zoomTo(17.0f));
+            CameraUpdate moveCity = CameraUpdateFactory.newLatLngZoom(FOCUSED_POSITION, 17);
+            aMap.moveCamera(moveCity);
+            aMap.addMarker(new MarkerOptions().
+                    icon(BitmapDescriptorFactory.fromBitmap(
+                            BitmapFactory.decodeResource(getResources(), R.mipmap.location_marker))).
+                    position(FOCUSED_POSITION));
+        }
+        aMap.setOnMapLoadedListener(this);
+
+    }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -82,6 +123,22 @@ public class LocationListFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onMapLoaded() {
+
+        List<PoiItem> pointOverlayList = new ArrayList<>();
+
+        for (Location l: mLocationAdapter.mLocationList) {
+            LatLonPoint point = new LatLonPoint(l.getLatitude(), l.getLongitude());
+            PoiItem p = new PoiItem("1", point, null, null);
+            pointOverlayList.add(p);
+        }
+        PointOverlay pointOverlay = new PointOverlay(aMap, pointOverlayList);
+        pointOverlay.removeFromMap();
+        pointOverlay.addToMap();
+        pointOverlay.zoomToSpan();
+    }
+
     private final LocationClickCallback mLocationClickCallback = new LocationClickCallback() {
         @Override
         public void onClick(Location location) {
@@ -91,4 +148,13 @@ public class LocationListFragment extends Fragment {
             }
         }
     };
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if (aMapLocation != null) {
+            Double latitude = aMapLocation.getLatitude();
+            Double longitude = aMapLocation.getLongitude();
+            Log.d(TAG, "latitude=" + latitude + ", longitude=" + longitude);
+        }
+    }
 }

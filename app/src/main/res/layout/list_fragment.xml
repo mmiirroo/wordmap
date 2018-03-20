@@ -30,7 +30,15 @@
         android:background="@color/cardview_light_background"
         android:orientation="vertical">
 
-        <TextView
+        <com.amap.api.maps.MapView
+            android:id="@+id/overlay_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            >
+
+        </com.amap.api.maps.MapView>
+<!--        <TextView
             android:id="@+id/loading_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -45,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="LinearLayoutManager"
-            app:visibleGone="@{!isLoading}"/>
+            app:visibleGone="@{!isLoading}"/>-->
 
     </LinearLayout>
 </layout>

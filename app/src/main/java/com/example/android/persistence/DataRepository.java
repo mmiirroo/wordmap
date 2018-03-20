@@ -45,7 +45,7 @@ public class DataRepository {
     /**
      * Get the list of products from the database and get notified when the data changes.
      */
-    public LiveData<List<LocationEntity>> getProducts() {
+    public LiveData<List<LocationEntity>> getLocations() {
         return mObservableLocations;
     }
 

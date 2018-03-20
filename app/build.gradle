@@ -52,6 +52,10 @@ android {
 }
 
 dependencies {
+    compile files('libs/AMap_3DMap_V2.2.1.jar')
+    compile files('libs/AMap_Services_V2.2.1.jar')
+    compile files('libs/AMap_Location_V3.8.0_20180201.jar')
+
     // Support libraries
     implementation deps.support.app_compat
     implementation deps.support.v4
