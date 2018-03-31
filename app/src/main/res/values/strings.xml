@@ -22,4 +22,5 @@
     <string name="cd_products_list">我的坐标</string>
     <string name="cd_comments_list">评论</string>
     <string name="cd_product_name">地名</string>
+    <string name="check">签到</string>
 </resources>

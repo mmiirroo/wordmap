@@ -15,8 +15,7 @@
   ~ limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
         <variable
@@ -24,9 +23,10 @@
             type="boolean" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:background="@color/cardview_light_background"
         android:orientation="vertical">
 
@@ -36,9 +36,10 @@
             android:layout_height="match_parent"
             android:focusable="true"
             >
-
         </com.amap.api.maps.MapView>
-<!--        <TextView
+
+
+        <!--        <TextView
             android:id="@+id/loading_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -55,5 +56,18 @@
             app:layoutManager="LinearLayoutManager"
             app:visibleGone="@{!isLoading}"/>-->
 
-    </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/check"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center_horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/check"
+                android:src="@mipmap/ic_check_black_24dp"
+                android:theme="@style/RippleWhite" />
+    </RelativeLayout>
+
 </layout>
