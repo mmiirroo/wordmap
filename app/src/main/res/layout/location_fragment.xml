@@ -28,7 +28,7 @@
 
         <variable
             name="locationViewModel"
-            type="com.example.android.persistence.viewmodel.LocationViewModel"/>
+            type="com.whole.wordmap.viewmodel.LocationViewModel"/>
     </data>
 
     <LinearLayout

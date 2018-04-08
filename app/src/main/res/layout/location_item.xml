@@ -19,9 +19,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="location"
-                  type="com.example.android.persistence.model.Location"/>
+                  type="com.whole.wordmap.model.Location"/>
         <variable name="callback"
-                  type="com.example.android.persistence.ui.LocationClickCallback"/>
+                  type="com.whole.wordmap.ui.LocationClickCallback"/>
     </data>
 
     <android.support.v7.widget.CardView
